@@ -1,10 +1,12 @@
 ## Reminder
-========
 
 Phần mềm chạy ngầm hỗ trợ nhắc nhở Check-in/Check-out và bảo vệ sức khỏe (mắt & cột sống) dành riêng cho dân kỹ thuật.
 
+![Screenshot](https://github.com/thanhne/mini-reminder/blob/master/image_2026-05-13_135903175.png "Screenshot")
+
+[Reminder.exe](https://github.com/thanhne/mini-reminder/blob/master/dist/reminder.exe)
+
 ## Tính năng nổi bật
------------------
 
 *   **⏰ Nhắc nhở chấm công:** Tự động gửi thông báo nhắc Check-in (trước 07:40) và Check-out (sau 17:30) từ Thứ 2 đến Thứ 7.
     
@@ -20,7 +22,6 @@ Phần mềm chạy ngầm hỗ trợ nhắc nhở Check-in/Check-out và bảo 
     
 
 ## Yêu cầu môi trường
-------------------
 
 *   **Ngôn ngữ:** Python 3.10+ (Khuyên dùng 3.14 như hiện tại).
     
@@ -30,7 +31,6 @@ Phần mềm chạy ngầm hỗ trợ nhắc nhở Check-in/Check-out và bảo 
     
 
 ## Hướng dẫn cài đặt & Sử dụng
----------------------------
 
 ### 1\. Chạy trực tiếp từ mã nguồn
 
@@ -57,7 +57,6 @@ pyinstaller --noconsole --onefile --add-data "logo.ico;." --icon="logo.ico" --na
 ```
 
 ## Lưu ý quan trọng
-----------------
 
 *   **Antivirus:** Nếu Windows Defender nhận nhầm file .exe là virus (False Positive), hãy chọn **"Unblock"** trong Properties hoặc thêm file vào danh sách loại trừ (Exclusion).
     
@@ -67,7 +66,6 @@ pyinstaller --noconsole --onefile --add-data "logo.ico;." --icon="logo.ico" --na
     
 
 ## Cấu trúc dự án
---------------
 
 *   reminder.py: Mã nguồn chính của ứng dụng.
     
@@ -76,10 +74,6 @@ pyinstaller --noconsole --onefile --add-data "logo.ico;." --icon="logo.ico" --na
 *   logo.ico: File icon của ứng dụng.
     
 *   dist/: Thư mục chứa file .exe sau khi build.
-
-## File ext:
-
-[Reminder.exe]
     
 
 **Developed by Thành Neee with ❤️**
