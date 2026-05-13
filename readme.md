@@ -1,9 +1,9 @@
-Reminder
+## Reminder
 ========
 
 Phần mềm chạy ngầm hỗ trợ nhắc nhở Check-in/Check-out và bảo vệ sức khỏe (mắt & cột sống) dành riêng cho dân kỹ thuật.
 
-Tính năng nổi bật
+## Tính năng nổi bật
 -----------------
 
 *   **⏰ Nhắc nhở chấm công:** Tự động gửi thông báo nhắc Check-in (trước 07:40) và Check-out (sau 17:30) từ Thứ 2 đến Thứ 7.
@@ -19,7 +19,7 @@ Tính năng nổi bật
 *   **🧪 Mode Test:** Hỗ trợ cờ --test để kiểm tra nhanh các tính năng thông báo và mờ màn hình.
     
 
-Yêu cầu môi trường
+## Yêu cầu môi trường
 ------------------
 
 *   **Ngôn ngữ:** Python 3.10+ (Khuyên dùng 3.14 như hiện tại).
@@ -29,32 +29,34 @@ Yêu cầu môi trường
 *   Bashpip install win11toast schedule pystray Pillow
     
 
-Hướng dẫn cài đặt & Sử dụng
+## Hướng dẫn cài đặt & Sử dụng
 ---------------------------
 
 ### 1\. Chạy trực tiếp từ mã nguồn
 
-Bash
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   python reminder.py   `
+```
+python reminder.py
+```
 
 ### 2\. Kiểm tra nhanh (Test Mode)
 
 Để kiểm tra xem thông báo và tính năng mờ màn hình có hoạt động chuẩn không:
 
-Bash
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   python reminder.py --test   `
+```
+python reminder.py --test
+```
 
 ### 3\. Đóng gói thành file .exe
 
 Sử dụng **PyInstaller** để tạo file thực thi độc lập (đảm bảo file logo.ico nằm cùng thư mục):
 
-Bash
+```
+pyinstaller --noconsole --onefile --add-data "logo.ico;." --icon="logo.ico" --name "reminder" reminder.py
+```
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   pyinstaller --noconsole --onefile --add-data "logo.ico;." --icon="logo.ico" --name "reminder" reminder.py   `
-
-Lưu ý quan trọng
+## Lưu ý quan trọng
 ----------------
 
 *   **Antivirus:** Nếu Windows Defender nhận nhầm file .exe là virus (False Positive), hãy chọn **"Unblock"** trong Properties hoặc thêm file vào danh sách loại trừ (Exclusion).
@@ -64,7 +66,7 @@ Lưu ý quan trọng
 *   **Icon:** Nếu không thấy icon dưới Tray, hãy đảm bảo file logo.ico được nhúng đúng qua tham số --add-data khi build.
     
 
-Cấu trúc dự án
+## Cấu trúc dự án
 --------------
 
 *   reminder.py: Mã nguồn chính của ứng dụng.
@@ -74,6 +76,10 @@ Cấu trúc dự án
 *   logo.ico: File icon của ứng dụng.
     
 *   dist/: Thư mục chứa file .exe sau khi build.
+
+## File ext:
+
+[Reminder.exe]
     
 
 **Developed by Thành Neee with ❤️**
