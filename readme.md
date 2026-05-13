@@ -79,7 +79,7 @@ pyinstaller --noconsole --onefile --add-data "logo.ico;." --icon="logo.ico" --na
 
 ## File ext:
 
-[Reminder.exe]
+[Reminder.exe](https://github.com/thanhne/mini-reminder/blob/master/dist/reminder.exe)
     
 
 **Developed by Thành Neee with ❤️**
