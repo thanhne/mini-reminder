@@ -59,31 +59,49 @@ def manage_startup(enabled):
 
 # --- Tính năng Bảo vệ Mắt ---
 def dim_screen():
-    # Tạo cửa sổ mờ toàn màn hình
-    dimmer = tk.Tk()
-    dimmer.attributes("-alpha", 0.8) # Độ mờ 20%
-    dimmer.attributes("-fullscreen", True)
-    dimmer.attributes("-topmost", True)
-    dimmer.config(bg="black")
-    dimmer.overrideredirect(True) # Xóa thanh tiêu đề
+    # Tạo một thread riêng cho cửa sổ này để không ảnh hưởng thread chính
+    def create_dimmer():
+        dimmer = tk.Tk()
+        dimmer.title("Eye Protection")
+        # Tăng độ mờ lên 0.85 để ép mắt phải nghỉ
+        dimmer.attributes("-alpha", 0.85, "-fullscreen", True, "-topmost", True)
+        dimmer.config(bg="black")
+        dimmer.overrideredirect(True) # Xóa taskbar và nút đóng
 
-    label = tk.Label(dimmer, text="👀 NGHỈ MẮT VÀ VẬN ĐỘNG THÔI!\n(Tự động đóng sau 20 giây)", 
-                     fg="white", bg="black", font=("Arial", 30, "bold"))
-    label.pack(expand=True)
+        # Nội dung nhắc nhở
+        label = tk.Label(dimmer, text="👀 ĐẾN GIỜ NGHỈ MẮT RỒI!\n\nHãy đứng dậy, nhìn xa 20m hoặc đi tới lui nhé.", 
+                         fg="white", bg="black", font=("Arial", 25, "bold"))
+        label.pack(expand=True)
 
-    # Phát tiếng bíp cảnh báo
-    winsound.Beep(1000, 500)
-    
-    # Đóng sau 20 giây
-    dimmer.after(20000, dimmer.destroy)
-    dimmer.mainloop()
+        # Phát tiếng Beep liên tục 3 lần cho tỉnh ngủ
+        for _ in range(3):
+            winsound.Beep(800, 400)
+            time.sleep(0.1)
+
+        # Tự đóng sau 20 giây
+        dimmer.after(20000, dimmer.destroy)
+        dimmer.mainloop()
+
+    # Chạy cửa sổ dimmer
+    create_dimmer()
 
 def break_reminder_loop():
+    last_break = time.time()
     while True:
         config = load_config()
-        interval = int(config.get("break_interval", 45))
-        time.sleep(interval * 60) # Chờ x phút
-        dim_screen()
+        interval_minutes = int(config.get("break_interval", 45))
+        interval_seconds = interval_minutes * 60
+        
+        current_time = time.time()
+        # Kiểm tra nếu đã quá thời gian quy định kể từ lần nghỉ cuối
+        if current_time - last_break >= interval_seconds:
+            # Gọi hàm hiển thị màn hình mờ
+            dim_screen()
+            # Cập nhật lại mốc thời gian sau khi nghỉ xong
+            last_break = time.time()
+        
+        # Kiểm tra lại mỗi 30 giây để không tốn CPU mà vẫn nhạy
+        time.sleep(30)
 
 # --- Logic Nhắc nhở cũ ---
 def send_notif(mode="checkin"):
