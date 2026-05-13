@@ -26,17 +26,42 @@ def load_config():
     if os.path.exists(CONFIG_FILE):
         with open(CONFIG_FILE, "r") as f:
             return json.load(f)
-    return {"checkin": "07:30", "checkout": "17:35", "break_interval": "45"}
+    # Thêm giá trị mặc định startup là True
+    return {"checkin": "07:30", "checkout": "17:35", "break_interval": "45", "startup": True}
 
-def save_config(checkin, checkout, interval):
+def save_config(checkin, checkout, interval, startup):
     with open(CONFIG_FILE, "w") as f:
-        json.dump({"checkin": checkin, "checkout": checkout, "break_interval": interval}, f)
+        json.dump({
+            "checkin": checkin, 
+            "checkout": checkout, 
+            "break_interval": interval, 
+            "startup": startup
+        }, f)
+
+def manage_startup(enabled):
+    # Chỉ thực hiện khi đã build thành file .exe
+    if not getattr(sys, 'frozen', False): return 
+    
+    file_path = sys.executable
+    file_name = os.path.basename(file_path)
+    # Đường dẫn thư mục Startup của Windows
+    startup_path = os.path.join(os.getenv('APPDATA'), r'Microsoft\Windows\Start Menu\Programs\Startup')
+    dest_path = os.path.join(startup_path, file_name)
+
+    if enabled:
+        if not os.path.exists(dest_path):
+            try: shutil.copy2(file_path, dest_path)
+            except: pass
+    else:
+        if os.path.exists(dest_path):
+            try: os.remove(dest_path) # Xóa file nếu người dùng bỏ tích
+            except: pass
 
 # --- Tính năng Bảo vệ Mắt ---
 def dim_screen():
     # Tạo cửa sổ mờ toàn màn hình
     dimmer = tk.Tk()
-    dimmer.attributes("-alpha", 0.5) # Độ mờ 50%
+    dimmer.attributes("-alpha", 0.8) # Độ mờ 20%
     dimmer.attributes("-fullscreen", True)
     dimmer.attributes("-topmost", True)
     dimmer.config(bg="black")
@@ -114,22 +139,40 @@ def start_ui():
     entry_interval.pack()
 
     def on_save():
-        save_config(entry_in.get(), entry_out.get(), entry_interval.get())
-        setup_schedule()
+        is_startup = var_startup.get()
+        save_config(entry_in.get(), entry_out.get(), entry_interval.get(), is_startup)
+        manage_startup(is_startup) 
+        
+        messagebox.showinfo("Thành công", "Đã lưu! App sẽ ẩn dưới Tray.")
         root.destroy()
         
-        # Chạy System Tray
+        # Load icon chắc chắn hơn
         icon_path = resource_path("logo.ico")
-        img = Image.open(icon_path) if os.path.exists(icon_path) else Image.new('RGB', (64, 64), color='blue')
+        try:
+            if os.path.exists(icon_path):
+                img = Image.open(icon_path)
+            else:
+                # Nếu không tìm thấy file, tạo một icon mặc định (hình vuông màu xanh) để không bị crash
+                img = Image.new('RGB', (64, 64), color=(0, 120, 215))
+        except:
+            img = Image.new('RGB', (64, 64), color=(0, 120, 215))
+
         menu = (item('Cài đặt', show_settings), item('Thoát', quit_app))
         icon = pystray.Icon("Reminder", img, "Reminder Ultimate", menu)
         icon.run()
+
+    # Chèn đoạn này vào trước tk.Button(...)
+    var_startup = tk.BooleanVar(value=config.get("startup", True))
+    cb_startup = tk.Checkbutton(root, text="Tự động bật khi khởi động Windows", variable=var_startup)
+    cb_startup.pack(pady=10)
 
     tk.Button(root, text="Lưu & Chạy ngầm", command=on_save, bg="#FF5722", fg="white", font=("Arial", 10, "bold")).pack(pady=15)
     root.mainloop()
 
 if __name__ == "__main__":
     if "--test" in sys.argv:
+        config = load_config()
+        toast("🔔 Check-in!", f"Đến giờ rồi ({config['checkin']}). Check-in thôi!")
         dim_screen()
         sys.exit()
 
